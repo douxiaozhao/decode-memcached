@@ -481,7 +481,7 @@ void dispatch_conn_new(int sfd, enum conn_states init_state, int event_flags,
     int tid = (last_thread + 1) % settings.num_threads;
 
     // LIBEVENT_THREAD threads 是一个全局数组变量
-    LIBEVENT_THREAD *thread = threads + tid; // 定位到下一个线程信息
+    LIBEVENT_THREAD *thread = threads + tid; // 定位到下一个线程信息,通过简单地轮放方式
 
     last_thread = tid;
 
@@ -859,7 +859,7 @@ void thread_init(int nthreads, struct event_base *main_base) {
 
 
     // LIBEVENT_THREAD 是结合 libevent 使用的结构体, event_base, 读写管道
-    threads = calloc(nthreads, sizeof(LIBEVENT_THREAD));
+    threads = calloc(nthreads, sizeof(LIBEVENT_THREAD)); // 生成 nthreads 数量的线程
     if (! threads) {
         perror("Can't allocate thread descriptors");
         exit(1);
